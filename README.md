@@ -7,3 +7,17 @@ Experimenting with Grunt
 ## Details on Gruntfile.js
 
 ### "build" task
+
+```css
+'shell:bower',
+'clean:dist',
+'wiredep',
+'concurrent:dist',
+'autoprefixer',
+'useminPrepare',
+'concat:generated',
+'cssmin:generated',
+'uglify:generated',
+'filerev',
+'usemin'
+```

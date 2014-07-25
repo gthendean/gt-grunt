@@ -9,15 +9,19 @@ Experimenting with Grunt
 ### "build" task
 
 ```css
-'shell:bower',
-'clean:dist',
-'wiredep',
-'concurrent:dist',
-'autoprefixer',
-'useminPrepare',
-'concat:generated',
-'cssmin:generated',
-'uglify:generated',
-'filerev',
-'usemin'
+  'shell:bower',
+  'clean:dist',
+  'wiredep',
+  'concurrent:copyStylesImagemin',
+  'autoprefixer',
+  'useminPrepare',
+  'concat:generated',
+  'ngmin',
+  'cssmin:generated',
+  'uglify:generated',
+  'copy:dist',
+  'cdnify',
+  'filerev',
+  'usemin',
+  'htmlmin'
 ```

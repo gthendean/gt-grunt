@@ -1,0 +1,339 @@
+'use strict';
+
+module.exports = function(grunt) {
+
+  // Load grunt tasks automatically, in lieu of manual like the following:
+  //    grunt.loadNpmTasks('grunt-contrib-clean');
+  require('load-grunt-tasks')(grunt);
+
+  // General configurations based on: package.json & bower.json 
+  var globalCfg = {
+    pkg: grunt.file.readJSON('package.json'),
+    bower: grunt.file.readJSON('bower.json'),
+    src: require('./bower.json').appPath || 'app',
+    dist: 'dist'
+  };
+
+  // Grunt configurations
+  grunt.initConfig({
+  
+    // Make general configurations available to Grunt
+    cfg: globalCfg,
+
+    // **********************************************
+    // Customize everything starting here           *
+    // each entry in this JSON structure is a tasks *
+    // **********************************************
+
+    // Mechanism to invoke shell command
+    shell: {
+      package: {
+        command: 'npm install'
+      },
+      bower: {
+        command: 'bower install'
+      }
+    },
+    
+    // Clean-up folder before re-build
+    // Subtasks:
+    //  - build: used in build, unit tests, and e2e tests
+    //  - dist: used in final build for deployment
+    // Foilders:
+    //  - .tmp: used for temporary assembling
+    //  - dist: used for assembling final artifacts
+    // Notes:
+    //  - The "dist" folder is to be pushed to Git for deployment using "gh-pages" task;
+    //    therefore it contains ".git" file (not deleted)
+    //  - files.dot means Allow patterns to match filenames starting with a period,
+    //    even if the pattern does not explicitly have a period in that spot.
+    //    See http://gruntjs.com/configuring-tasks - Files
+    clean: {
+      serve: {src: '.tmp'},
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp/{,*/}*',
+            '.tmp',
+            '<%= cfg.dist %>/{,*/}*',
+            '!<%= cfg.dist %>/.git*'
+          ]
+        }]
+      }
+    },
+
+    // Copy files:
+    // - copy styles to ".tmp" so that it can be cssmin
+    copy: {
+      styles: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= cfg.src %>/styles',
+            dest: '.tmp/styles/',
+            src: '{,*/}*.css'
+          },
+          {
+            expand: true,
+            cwd: '.',
+            dest: '.tmp/',
+            src: 'bower_components/bootstrap/dist/css/{,*/}*.css'
+          }
+        ]
+      },
+      dist: {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= cfg.src %>',
+            dest: '<%= cfg.dist %>',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              '*.html',
+              'views/{,*/}*.html',
+              'images/{,*/}*.{webp}',
+              'fonts/*'
+            ]
+          },
+          {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= cfg.dist %>/images',
+            src: ['generated/*']
+          },
+          {
+            expand: true,
+            cwd: 'bower_components/bootstrap/dist',
+            src: 'fonts/*',
+            dest: '<%= cfg.dist %>'
+          }
+        ]
+      }
+    },
+    
+    // Automatically inject Bower components artifacts into the app
+    // The index.html specifies which artifacts to inject: css, js. etc.
+    wiredep: {
+      app: {
+        src: ['<%= cfg.src %>/index.html'],
+        ignorePath: new RegExp('^<%= cfg.src %>/|../')
+      }
+    },
+
+    imagemin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= cfg.src %>/images',
+          src: '{,*/}*.{png,jpg,jpeg,gif}',
+          dest: '<%= cfg.dist %>/images'
+        }]
+      }
+    },
+
+    svgmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= cfg.src %>/images',
+          src: '{,*/}*.svg',
+          dest: '<%= cfg.dist %>/images'
+        }]
+      }
+    },
+
+    // Add vendor prefixed styles
+    autoprefixer: {
+      options: {
+        browsers: ['last 1 version']
+      },
+      dist: {
+        files: [
+          {
+            expand: true,
+            cwd: '.tmp/styles/',
+            src: '{,*/}*.css',
+            dest: '.tmp/styles/'
+          },
+          {
+            expand: true,
+            cwd: '.tmp/bower_components/',
+            src: '{,*/}*.css',
+            dest: 'bower_components/styles/'
+          }
+        ]
+      }
+    },
+
+    // Reads HTML for usemin blocks to enable smart builds that automatically
+    // concat, minify and revision files. Creates configurations in memory so
+    // additional tasks can operate on them
+    //  concat - dest=.tmp/concat
+    //  uglify - src=.tmp/concat dest is specified below
+    //  cssmin - src is specified in index.html, dest is specified below
+    useminPrepare: {
+      html: '<%= cfg.src %>/index.html',
+      options: {
+        root: '',
+        dest: '<%= cfg.dist %>',
+        flow: {
+          html: {
+            steps: {
+              js: ['concat', 'uglifyjs'],
+              css: ['cssmin']
+            },
+            post: {}
+          }
+        }
+      }
+    },
+
+    // Performs rewrites based on filerev and the useminPrepare configuration
+    usemin: {
+      html: ['<%= cfg.dist %>/{,*/}*.html'],
+      css: ['<%= cfg.dist %>/styles/{,*/}*.css'],
+      options: {
+        assetsDirs: ['<%= cfg.dist %>','<%= cfg.dist %>/images']
+      }
+    },
+
+    // ngmin tries to make the code safe for minification automatically by
+    // using the Angular long form for dependency injection. It doesn't work on
+    // things like resolve or inject so those have to be done manually.
+    ngmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/concat/scripts',
+          src: '*.js',
+          dest: '.tmp/concat/scripts'
+        }]
+      }
+    },
+    
+    // Replace Google CDN references
+    // TODO - Not very clear what the purpose of using this
+    cdnify: {
+      dist: {
+        html: ['<%= cfg.dist %>/*.html']
+      }
+    },
+    
+    // Renames files for browser caching purposes
+    filerev: {
+      dist: {
+        src: [
+          '<%= cfg.dist %>/scripts/{,*/}*.js',
+          '<%= cfg.dist %>/styles/{,*/}*.css',
+          '<%= cfg.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= cfg.dist %>/styles/fonts/*'
+        ]
+      }
+    },
+    
+    htmlmin: {
+      dist: {
+        options: {
+          collapseWhitespace: true,
+          conservativeCollapse: true,
+          collapseBooleanAttributes: true,
+          removeCommentsFromCDATA: true,
+          removeOptionalTags: true
+        },
+        files: [
+          {
+            expand: true,
+            cwd: '<%= cfg.dist %>',
+            src: ['*.html', 'views/{,*/}*.html'],
+            dest: '<%= cfg.dist %>'
+          }
+        ]
+      }
+    },
+
+    // Run some tasks in parallel to speed up the build process
+    concurrent: {
+      copyStyles: {
+        tasks: ['copy:styles'],
+        options: {logConcurrentOutput: true}
+      },
+      copyStylesImagemin: [
+        'copy:styles',
+        'imagemin',
+        'svgmin'
+      ]
+    },    
+    
+    // Make sure code styles are up to par and there are no obvious mistakes
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
+      all: {
+        src: [
+          'Gruntfile.js',
+          '<%= cfg.src %>/scripts/{,*/}*.js'
+        ]
+      },
+      test: {
+        options: {
+          jshintrc: 'test/.jshintrc'
+        },
+        src: ['test/spec/{,*/}*.js']
+      }
+    }
+
+  });
+  
+  // Default task(s).
+  grunt.registerTask('default', [
+    'newer:jshint',
+    'test',
+    'build'
+  ]);
+
+  grunt.registerTask('serve', 'Prepare, compile, then start connection to web server', function (target) {
+    grunt.log.writeln(['>>> '+'Prepare, compile, then start connection to web server']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'clean:serve',
+      'concurrent:copyStyles'
+    ]);    
+  });
+
+  grunt.registerTask('test', 'Prepare, compile, then running unit & e2e tests', function (target) {
+    grunt.log.writeln(['>>> '+'Prepare, compile, then running unit & e2e tests']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'clean:serve'
+    ]);
+  });
+
+  grunt.registerTask('build', 'Build for deployment', function (target) {
+    grunt.log.writeln(['>>> '+'Build for deployment']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'shell:bower',
+      'newer:jshint',
+      'clean:dist',
+      'wiredep',
+      'concurrent:copyStylesImagemin',
+      'autoprefixer',
+      'useminPrepare',
+      'concat:generated',
+      'ngmin',
+      'cssmin:generated',
+      'uglify:generated',
+      'copy:dist',
+      'cdnify',
+      'filerev',
+      'usemin',
+      'htmlmin'
+    ]);
+  });
+    
+};

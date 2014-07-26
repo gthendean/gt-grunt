@@ -453,6 +453,9 @@ module.exports = function(grunt) {
     // TODO - target should be the commit message
     grunt.log.writeln(['>>> '+'Build and deploy']);
     grunt.log.writeln(['>>> '+'Target: '+target]);
+    if (target) {
+      grunt.config.set(['gh-pages', 'options', 'message'], target);
+    }
     grunt.task.run([
       'build',
       'gh-pages'

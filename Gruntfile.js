@@ -450,7 +450,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', 'Build and deploy', function (target) {
-    // TODO - target should be the commit message
+    // Command: grunt deploy:"custom message for Git commit"
     grunt.log.writeln(['>>> '+'Build and deploy']);
     grunt.log.writeln(['>>> '+'Target: '+target]);
     if (target) {

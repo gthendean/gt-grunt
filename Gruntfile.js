@@ -197,6 +197,13 @@ module.exports = function(grunt) {
             cwd: 'bower_components/bootstrap/dist',
             src: 'fonts/*',
             dest: '<%= cfg.dist %>'
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: 'deploy',
+            src: '**/*',
+            dest: '<%= cfg.dist %>'
           }
         ]
       }
@@ -373,8 +380,17 @@ module.exports = function(grunt) {
         },
         src: ['test/spec/{,*/}*.js']
       }
-    }
+    },
 
+    'gh-pages': {
+      options: {
+        base: 'dist',
+        repo: 'https://github.com/gthendean/gt-grunt-deploy.git',
+        branch: 'master'
+      },
+      src: '**/*'
+    }
+    
   });
   
   // Default task(s).
@@ -410,8 +426,8 @@ module.exports = function(grunt) {
     ]);
   });
 
-  grunt.registerTask('build', 'Build for deployment', function (target) {
-    grunt.log.writeln(['>>> '+'Build for deployment']);
+  grunt.registerTask('build', 'Build only', function (target) {
+    grunt.log.writeln(['>>> '+'Build only']);
     grunt.log.writeln(['>>> '+'Target: '+target]);
     grunt.task.run([
       'shell:bower',
@@ -432,5 +448,15 @@ module.exports = function(grunt) {
       'htmlmin'
     ]);
   });
-    
+
+  grunt.registerTask('deploy', 'Build and deploy', function (target) {
+    // TODO - target should be the commit message
+    grunt.log.writeln(['>>> '+'Build and deploy']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'build',
+      'gh-pages'
+    ]);
+  });
+  
 };

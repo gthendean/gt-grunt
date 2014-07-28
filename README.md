@@ -8,7 +8,7 @@ Experimenting with Grunt
 
 ### "build" task
 
-```css
+```js
   'shell:bower',
   'clean:dist',
   'wiredep',

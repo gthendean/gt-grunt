@@ -9,7 +9,8 @@ module.exports = function(grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
   
-  // General configurations based on: package.json & bower.json 
+  // General configurations based on: package.json & bower.json
+  // Modify the 'deployrepo' to the target deployment repository
   var globalCfg = {
     pkg: grunt.file.readJSON('package.json'),
     bower: grunt.file.readJSON('bower.json'),
@@ -405,7 +406,7 @@ module.exports = function(grunt) {
     grunt.log.writeln(['>>> '+'Prepare, compile, then start connection to web server']);
     grunt.log.writeln(['>>> '+'Target: '+target]);
     
-    if (target === 'dist') {
+    if (target === 'build') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
 

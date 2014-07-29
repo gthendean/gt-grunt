@@ -61,21 +61,43 @@ Inject Bower package artifacts into the specified source code file. For example,
 <!-- endbower -->
 ```
 
+#### "concurrent" - [grunt-concurrent](https://github.com/tschaub/grunt-gh-pages)
+Running non-dependent tasks concurrently can potentially improve your build time significantly. 
+
+#### "autoprefixer" - [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer)
+Parses CSS and adds vendor-prefixed CSS properties using the [Can I Use](http://caniuse.com/) database.
+
+#### "usemin" - [grunt-usemin](https://github.com/yeoman/grunt-usemin)
+Replaces the references of scripts, stylesheets and other assets within HTML files dynamically with optimized versions of them.
+To do this usemin exports 2 built-in tasks called `useminPrepare` and `usemin`. Plugins used in optimizing files:
+* [`concat`](https://github.com/gruntjs/grunt-contrib-concat) concatenates files (usually JS or CSS).
+* [`uglify`](https://github.com/gruntjs/grunt-contrib-uglify) minifies JS files.
+* [`cssmin`](https://github.com/gruntjs/grunt-contrib-cssmin) minifies CSS files.
+* [`filerev`](https://github.com/yeoman/grunt-filerev) revisions static assets through a file content hash, for browser caching purposes.
+
+#### "ngmin" - [grunt-ngmin](https://github.com/btford/grunt-ngmin)
+Pre-minifying Angular apps.
+*Depracated in favor of [ng-annotate](https://github.com/olov/ng-annotate)*
+
+#### "copy" - [grunt-contrib-copy](https://github.com/gruntjs/grunt-contrib-copy)
+Copy files and folders.
+
+#### "cdnify" - [grunt-google-cdn](https://github.com/btford/grunt-google-cdn)
+Replacing refs to resources on the [Google CDN](https://developers.google.com/speed/libraries/devguide)._
+For example, replacing the following:
 ```shell
-'shell:bower',
-'newer:jshint',
-'clean:dist',
-'wiredep',
-'concurrent:copyStylesImagemin',
-'autoprefixer',
-'useminPrepare',
-'concat:generated',
-'ngmin',
-'cssmin:generated',
-'uglify:generated',
-'copy:dist',
-'cdnify',
-'filerev',
-'usemin',
-'htmlmin'
+<script src="bower_components/angular-route/angular-route.js"></script>
 ```
+with
+```shell
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+```
+
+#### "htmlmin" - [grunt-contrib-htmlmin](https://github.com/gruntjs/grunt-contrib-htmlmin)
+Minify HTML.
+
+#### "gh-pages" - [grunt-gh-pages](https://github.com/tschaub/grunt-gh-pages)
+Publish to GitHub Pages. The step includes: create a temporary clone of the current repository,
+create a `gh-pages` branch if one doesn't already exist, 
+copy over all files from the `dist` directory that match patterns from the `src` configuration,
+commit all changes, and push to the `origin` remote.

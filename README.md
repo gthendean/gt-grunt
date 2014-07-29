@@ -11,8 +11,7 @@ If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out th
 
 ## Details on Gruntfile.js
 
-Custom tasks include: default, serve, test, build and deploy._
-To be implemented task: test._
+Custom tasks include: default, serve, test, build and deploy.
 
 Invoking task using the following command:
 ```shell
@@ -31,14 +30,25 @@ watch for files change & trigger a live reload when files change.
 #### "test"
 Run the unit and e2e tests using Karma.
 
-#### "build" task
+*Note: install the drivers needed by Protractor before running the E2E tests for the first time.
+Only need to do it once. The scripts are included in the `node_modules\.bin` folder as shown below*
+
+```shell
+webdriver-manager update
+// when behind proxy
+webdriver-manager update --proxy=http://proxy.oak.sap.corp:8080/
+```
+
+
+#### "build"
 Run this task to build the final artifacts and store them on the "dist" folder.
+
 The built artifacts can be manually verified on the local web server before deployment using the following:
 ```shell
 grunt serve:build
 ```
 
-#### "deploy" task
+#### "deploy"
 Deploying the files in "dist" folder to the deployment repository on Github.
 Cloud web server, like Azure website, can be linked to the Github repository to pull deployment artifacts.
 Also, whenever the repository is updated, Azure website will also be redeployed.
@@ -50,7 +60,7 @@ Invoking shell commands, such as `bower install`.
 
 #### "newer:jshint" - [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint)
 Validate Javascript files with [JSHint](http://wwww.jshint.com).
-See the [JSHint documentation](http://www.jshint.com/docs/) for a list of supported options._
+See the [JSHint documentation](http://www.jshint.com/docs/) for a list of supported options.
 
 [grunt-newer](https://github.com/tschaub/grunt-newer) is used in conjunction with other task that needs to run with newer files only.
 
@@ -101,3 +111,16 @@ Publish to GitHub Pages. The step includes: create a temporary clone of the curr
 create a `gh-pages` branch if one doesn't already exist, 
 copy over all files from the `dist` directory that match patterns from the `src` configuration,
 commit all changes, and push to the `origin` remote.
+
+## Test
+See `karma.conf.js`.
+
+#### "karma" - [karma](https://github.com/karma-runner/karma)
+A simple tool that allows you to execute JavaScript code in multiple real browsers.
+
+#### "karma-jasmine" - [karma-jasmine](https://github.com/karma-runner/karma-jasmine)
+Adapter for the Jasmine testing framework.
+
+#### "karma-phantomjs-launcher" - [karma-phantomjs-launcher](https://github.com/karma-runner/karma-phantomjs-launcher)
+Launcher for [PhantomJS](http://phantomjs.org/)._
+PhantomJS is a solution for: headless website testing, screen capture, page automation, and network monitoring.

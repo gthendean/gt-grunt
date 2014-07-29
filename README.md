@@ -28,17 +28,36 @@ Start the web server, and work in tandem with [grunt-contrib-watch](https://gith
 watch for files change & trigger a live reload when files change. 
 
 #### "test"
-Run the unit and e2e tests using Karma.
+Run the unit and e2e tests.
+Unit tests focus on testing small isolated parts of the application.
+The unit tests are kept in the `test/unit` directory.
+The project is configured to use [Karma](https://github.com/karma-runner/karma) to run the unit tests.
 
-*Note: install the drivers needed by Protractor before running the E2E tests for the first time.
-Only need to do it once. The scripts are included in the `node_modules\.bin` folder as shown below*
+E2E tests ensure that the application as a whole operates as expected.
+They are designed to test the whole client side application,
+in particular that the views are displaying and behaving correctly.
+It does this by simulating real user interaction with the real application running in the browser.
+The E2E tests are kept in the `test/e2e` directory.
+
+The project is configured to use [Protractor](https://github.com/angular/protractor) to run the E2E tests for the application.
+Protractor relies upon a set of drivers to allow it to interact with the browser.
+The drivers need to be installed (only once) before running the e2e tests. 
+The script is included in the `node_modules\.bin` folder after installation of Protractor, and
+it is integrated with `npm` and configured in the `package.json' file, as shown below.
 
 ```shell
-webdriver-manager update
-// when behind proxy
-webdriver-manager update --proxy=http://proxy.oak.sap.corp:8080/
+"scripts": {
+  "preupdate-webdriver": "npm install",
+  "update-webdriver": "webdriver-manager update"
+  // when behind corporate proxy
+  //"update-webdriver": "webdriver-manager update --proxy=http://proxy:8080/"
+}
 ```
 
+Install the drivers by running
+```shell
+npm run update-webdriver
+```
 
 #### "build"
 Run this task to build the final artifacts and store them on the "dist" folder.

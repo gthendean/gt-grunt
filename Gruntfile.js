@@ -14,7 +14,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     bower: grunt.file.readJSON('bower.json'),
     src: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist',
+    deployrepo: 'https://github.com/gthendean/gt-grunt-deploy.git'
   };
 
   // Grunt configurations
@@ -385,7 +386,7 @@ module.exports = function(grunt) {
     'gh-pages': {
       options: {
         base: 'dist',
-        repo: 'https://github.com/gthendean/gt-grunt-deploy.git',
+        repo: '<%= cfg.deployrepo %>',
         branch: 'master'
       },
       src: '**/*'

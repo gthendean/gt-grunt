@@ -1,6 +1,9 @@
 exports.config = {
   allScriptsTimeout: 11000,
 
+// The address of a running standalone selenium server.
+//  seleniumAddress: 'http://localhost:4444/wd/hub',
+  
   specs: [
     'e2e/*.js'
   ],
@@ -9,6 +12,9 @@ exports.config = {
     'browserName': 'chrome'
   },
   
+  /*
+  chromeOnly: true,
+  */
   /*
   multiCapabilities: [{
     'browserName': 'chrome'

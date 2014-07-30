@@ -2,7 +2,7 @@
 
 function run() {
     var person = {
-        'first-name': 'Jerome',
+        'firstName': 'Jerome',
         'lastName': 'Howard',
         'address': {
             'street-no': 23,
@@ -12,6 +12,7 @@ function run() {
     };
     // Note: if the variable person is not used, it will be dropped by Uglify 
     console.log(person.lastName);
+    return person;
 }
 
 // Dummy call to avoid jshint warning: defined but never used

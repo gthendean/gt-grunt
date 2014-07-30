@@ -391,9 +391,41 @@ module.exports = function(grunt) {
         branch: 'master'
       },
       src: '**/*'
+    },
+
+    // Test settings; When singleRun is false, it will wait for file changes
+    karma: {
+      unitOnce: {
+        configFile: 'test/karma.conf.js',
+        singleRun: true
+      },
+      unitWatch: {
+        configFile: 'test/karma.conf.js',
+        singleRun: false
+      }
+    },
+
+    // E2E test using Protractor
+    protractor: {
+      options: {
+        configFile: 'test/protractor-conf.js',
+        keepAlive: false,  // If false, the grunt process stops when the test fails
+        noColor: false,   // If true, protractor will not use colors in its output
+      },
+      e2eStopOnFail: {
+        options: {
+          keepAlive: false
+        }
+      },
+      e2eContinueOnFail: {
+        options: {
+          keepAlive: true
+        }
+      }
     }
     
   });
+  
   
   // Default task(s).
   grunt.registerTask('default', [
@@ -420,14 +452,43 @@ module.exports = function(grunt) {
     ]);    
   });
 
-  grunt.registerTask('test', 'Prepare, compile, then running unit & e2e tests', function (target) {
+  grunt.registerTask('tests', 'Prepare, compile, then running unit & e2e tests', function (target) {
     grunt.log.writeln(['>>> '+'Prepare, compile, then running unit & e2e tests']);
     grunt.log.writeln(['>>> '+'Target: '+target]);
     grunt.task.run([
-      'clean:serve'
+      'clean:serve',
+      'concurrent:copyStyles',
+      'autoprefixer',
+      'connect:test',
+      'karma:unitOnce',
+      'protractor:e2eContinueOnFail'
     ]);
   });
 
+  grunt.registerTask('unit-tests', 'Prepare, compile, then running unit & e2e tests', function (target) {
+    grunt.log.writeln(['>>> '+'Prepare, compile, then running unit & e2e tests']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'clean:serve',
+      'concurrent:copyStyles',
+      'autoprefixer',
+      'connect:test',
+      'karma:unitWatch'
+    ]);
+  });
+
+  grunt.registerTask('e2e-tests', 'Prepare, compile, then running unit & e2e tests', function (target) {
+    grunt.log.writeln(['>>> '+'Prepare, compile, then running unit & e2e tests']);
+    grunt.log.writeln(['>>> '+'Target: '+target]);
+    grunt.task.run([
+      'clean:serve',
+      'concurrent:copyStyles',
+      'autoprefixer',
+      'connect:test',
+      'protractor:e2eStopOnFail'
+    ]);
+  });
+  
   grunt.registerTask('build', 'Build only', function (target) {
     grunt.log.writeln(['>>> '+'Build only']);
     grunt.log.writeln(['>>> '+'Target: '+target]);

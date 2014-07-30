@@ -7,7 +7,9 @@
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may play with this Grunt project.
+If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide,
+as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins.
+Once you're familiar with that process, you may play with this Grunt project.
 
 ## Details on Gruntfile.js
 
@@ -118,7 +120,8 @@ Pre-minifying Angular apps.
 Copy files and folders.
 
 #### "cdnify" - [grunt-google-cdn](https://github.com/btford/grunt-google-cdn)
-Replacing refs to resources on the [Google CDN](https://developers.google.com/speed/libraries/devguide)._
+Replacing refs to resources on the [Google CDN](https://developers.google.com/speed/libraries/devguide).
+
 For example, replacing the following:
 ```shell
 <script src="bower_components/angular-route/angular-route.js"></script>
@@ -147,5 +150,6 @@ A simple tool that allows you to execute JavaScript code in multiple real browse
 Adapter for the Jasmine testing framework.
 
 #### "karma-phantomjs-launcher" - [karma-phantomjs-launcher](https://github.com/karma-runner/karma-phantomjs-launcher)
-Launcher for [PhantomJS](http://phantomjs.org/)._
+Launcher for [PhantomJS](http://phantomjs.org/).
+
 PhantomJS is a solution for: headless website testing, screen capture, page automation, and network monitoring.

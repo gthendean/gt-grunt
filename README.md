@@ -140,6 +140,11 @@ create a `gh-pages` branch if one doesn't already exist,
 copy over all files from the `dist` directory that match patterns from the `src` configuration,
 commit all changes, and push to the `origin` remote.
 
+#### "protractor" - [grunt-protractor-runner](https://github.com/teerapap/grunt-protractor-runner)
+[Protractor](https://github.com/angular/protractor) is an end-to-end test framework for AngularJS applications.
+Protractor is a Node.js program built on top of [WebDriverJS](https://code.google.com/p/selenium/wiki/WebDriverJs).
+Protractor runs tests against your application running in a real browser, interacting with it as a user would.
+
 ## Test
 See `karma.conf.js`.
 

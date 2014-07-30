@@ -15,7 +15,7 @@ Custom tasks include: default, serve, test, build and deploy.
 
 Invoking task using the following command:
 ```shell
-grunt [default | serve | test | build | deploy]
+grunt [default | serve | tests | unit-tests | e2e-tests | build | deploy]
 ```
 
 ### Custom Tasks
@@ -27,17 +27,17 @@ Used at a certain development milestone to restart the web server and perform: j
 Start the web server, and work in tandem with [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) that will
 watch for files change & trigger a live reload when files change. 
 
-#### "tests", "unit-tests", 
+#### "tests", "unit-tests", "e2e-tests"
 Run the unit and e2e tests.
 Unit tests focus on testing small isolated parts of the application.
 The unit tests are kept in the `test/unit` directory.
 The project is configured to use [Karma](https://github.com/karma-runner/karma) to run the unit tests.
 
-For `tests` task the unit tests are run once, and the E2E tests continue even when there is fail test(s);
+For `tests` task, the unit tests are run once, and the E2E tests continue even when there is fail test(s);
 
-For `unit-tests` task when tests are re-executed whenever the Javascript files change.
+For `unit-tests` task, the server stays on, and unit tests are automatically re-executed whenever the Javascript files change.
 
-For `e2e-tests` task when e2e tests stop when encounter a fail test.
+For `e2e-tests` task, when e2e tests stop when encounter a fail test.
 
 E2E tests ensure that the application as a whole operates as expected.
 They are designed to test the whole client side application,

@@ -150,6 +150,9 @@ module.exports = function(grunt) {
             '!<%= cfg.dist %>/.git*'
           ]
         }]
+      },
+      nodeModules: {
+        src: 'node_modules'
       }
     },
 

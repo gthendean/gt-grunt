@@ -51,6 +51,6 @@
   },
   "scripts": {
     "preupdate-webdriver": "npm install",
-    "update-webdriver": "webdriver-manager update --proxy=http://proxy:8080/"
+    "update-webdriver": "webdriver-manager update"
   }
 }
